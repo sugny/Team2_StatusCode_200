@@ -1,4 +1,4 @@
-Feature: Dietician API Validating User login and logout module 
+Feature: Dietician API TC:001 Dietician login and logout http request 
 
 Scenario: Dietcian login response with valid credentials 
 	Given Add userLoginDto Payload 

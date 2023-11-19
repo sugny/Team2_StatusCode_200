@@ -1,7 +1,6 @@
 package com.dietician.Utilities;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,20 +12,20 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
 
-	public FileInputStream fi;
-	public XSSFWorkbook workbook;
-	public XSSFSheet sheet;
-	public XSSFCell cell;
-	String data;
+	public static FileInputStream fi;
+	public static XSSFWorkbook workbook;
+	public static XSSFSheet sheet;
+	public static XSSFCell cell;
+	static String cellValue;
 	String columnHeaderName;
-	String sheetName = "dietician_User_login";
 	public static String excelFilePath = "./src/test/resources/Dietician API.xlsx";
 
-	public List<String> getCellData() {
+	public static List<String> getExcelData() {
 		try {
 			fi = new FileInputStream(excelFilePath);
 			workbook = new XSSFWorkbook(fi);
-			sheet = workbook.getSheet(sheetName);
+			sheet = workbook.getSheet(ConfigReader.getGlobalValue("dieticianSheet"));
+			System.out.println(ConfigReader.getGlobalValue("dieticianSheet")+"*********************");
 			int rowCount = sheet.getLastRowNum();
 			short colCount = sheet.getRow(0).getLastCellNum();
 			List<String> list = new ArrayList<String>();
@@ -34,8 +33,8 @@ public class ExcelReader {
 				XSSFRow row = sheet.getRow(i);
 				for (int j = 0; j < colCount; j++) {
 					cell = row.getCell(j);
-					data = cell.getStringCellValue();
-					list.add(data);
+					cellValue = cell.getStringCellValue();
+					list.add(cellValue);
 				}
 			}
 			workbook.close();
@@ -45,5 +44,10 @@ public class ExcelReader {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static List setData() {
+		List<String> data = ExcelReader.getExcelData();
+		return data;
 	}
 }
