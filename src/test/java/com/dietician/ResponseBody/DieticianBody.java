@@ -1,4 +1,4 @@
-package com.dietician.RequestBody;
+package com.dietician.ResponseBody;
 
 public class DieticianBody {
 	
