@@ -1,5 +1,11 @@
 package com.dietician.RestAssuredBase;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.dietician.Utilities.ConfigReader;
 
 import io.restassured.RestAssured;
@@ -22,6 +28,19 @@ public class RestAssuredBase {
 		JsonPath js = new JsonPath(getResponse);
 		String value = js.get(key);
 		return value;
+	}
+	
+	public Object jsonToString(Response response, String key) {
+		String responseBody = response.asString();
+		JSONArray js = new JSONArray(responseBody);
+		List<Object> patientList = new ArrayList<>();
+		Object object = null;
+		for(int i=0;i<js.length();i++) {
+			JSONObject  obj = js.getJSONObject(i);
+			object = obj.get(key);
+			patientList.add(object);
+		}
+		return patientList;
 	}
 
 }
