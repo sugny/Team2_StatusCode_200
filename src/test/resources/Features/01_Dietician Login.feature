@@ -17,6 +17,14 @@ Scenario Outline: Dietician create new patient using post request
 	Examples:
  	| Sheetname        |
     | CreatePatient    |
+   
+
+Scenario: Dietician sends get all patient http request
+	Given  User send get request with valid token
+	And get all patient details
+	Then new patient created and verify status code 200
+	And verify the response body of get request
+
 
 	
 #Negative Scenario
