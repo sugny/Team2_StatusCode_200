@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "patientId": {
+      "type": "integer"
+    },
+    "FirstName": {
+      "type": "string"
+    },
+    "LastName": {
+      "type": "string"
+    },
+    "ContactNumber": {
+      "type": "string"
+    },
+    "Email": {
+      "type": "string"
+    },
+    "Allergy": {
+      "type": "string"
+    },
+    "FoodCategory": {
+      "type": "string"
+    },
+    "FileMorbidity": {
+      "type": "object",
+      "properties": {
+        "655bbbe6fa57dd184cbe9aeb": {
+          "type": "object",
+          "properties": {
+            "Average Glucose": {
+              "type": "string"
+            },
+            "HbA1c": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "Average Glucose",
+            "HbA1c"
+          ]
+        }
+      },
+      "required": [
+        "655bbbe6fa57dd184cbe9aeb"
+      ]
+    },
+    "FileMorbidityCondition": {
+      "type": "object",
+      "properties": {
+        "655bbbe6fa57dd184cbe9aeb": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "655bbbe6fa57dd184cbe9aeb"
+      ]
+    },
+    "DateOfBirth": {
+      "type": "string"
+    },
+    "DieticianId": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "patientId",
+    "FirstName",
+    "LastName",
+    "ContactNumber",
+    "Email",
+    "Allergy",
+    "FoodCategory",
+    "FileMorbidity",
+    "FileMorbidityCondition",
+    "DateOfBirth",
+    "DieticianId"
+  ]
+}
