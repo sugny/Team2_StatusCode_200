@@ -1,4 +1,4 @@
-package com.dietician.Request;
+package com.dietician.PayloadBuilder;
 
 public class Request {
 	
