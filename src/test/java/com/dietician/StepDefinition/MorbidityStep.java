@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Assert;
 
-import com.dietician.Request.DietLoginPost;
+
 import com.dietician.RestAssuredBase.RestAssuredBase;
 import com.dietician.RestAssuredBase.TokenHolder;
 import com.dietician.Utilities.ConfigReader;
@@ -17,7 +17,6 @@ import io.restassured.specification.ResponseSpecification;
 
 
 public class MorbidityStep extends RestAssuredBase {
-	DietLoginPost dietLoginPost = new DietLoginPost();
 	RequestSpecification request;
 	Response response;
 	String asString;
