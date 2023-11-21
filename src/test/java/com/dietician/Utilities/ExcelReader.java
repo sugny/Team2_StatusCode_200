@@ -1,53 +1,92 @@
 package com.dietician.Utilities;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 public class ExcelReader {
 
-	public static FileInputStream fi;
-	public static XSSFWorkbook workbook;
-	public static XSSFSheet sheet;
-	public static XSSFCell cell;
-	static String cellValue;
-	String columnHeaderName;
-	public static String excelFilePath = "./src/test/resources/Dietician API.xlsx";
+		private static int totalRow;
+		private String code;
+		private String result;
+		private String excelPath = ConfigReader.getexcelfilepath();
 
-	public static List<String> getExcelData() {
-		try {
-			fi = new FileInputStream(excelFilePath);
-			workbook = new XSSFWorkbook(fi);
-			sheet = workbook.getSheet(ConfigReader.getGlobalValue("dieticianSheet"));
-			System.out.println(ConfigReader.getGlobalValue("dieticianSheet")+"*********************");
-			int rowCount = sheet.getLastRowNum();
-			short colCount = sheet.getRow(0).getLastCellNum();
-			List<String> list = new ArrayList<String>();
-			for (int i = 1; i <= rowCount; i++) {
-				XSSFRow row = sheet.getRow(i);
-				for (int j = 0; j < colCount; j++) {
-					cell = row.getCell(j);
-					cellValue = cell.getStringCellValue();
-					list.add(cellValue);
-				}
+		private ExcelReader() {};
+		private static ExcelReader excelReader;
+		private DataFormatter formatter = new DataFormatter();
+		
+		public static ExcelReader getInstance() {
+			if(excelReader == null) {
+				excelReader = new ExcelReader();
 			}
-			workbook.close();
-			fi.close();
-			return list;
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			return excelReader;
 		}
-	}
-	
-	public static List setData() {
-		List<String> data = ExcelReader.getExcelData();
-		return data;
-	}
+		
+		/**
+		 * key - Sheet Name > Map
+		 *               List of row > each row is a Map
+		 *                  Map> key, value
+		 *                   
+		 *               
+		 * 
+		 */
+		private Map<String, List<Map<String, String>>> excelSheetCache = new HashMap<>();
+		
+		public List<Map<String, String>> getData(String sheetName) {
+			if(excelSheetCache.containsKey(sheetName)) {
+				return excelSheetCache.get(sheetName);
+			}
+			else {
+				return excelReader.readSheet(sheetName);
+			}
+		}
+		
+		private List<Map<String, String>> readSheet(String sheetName) {
+			try {
+				Workbook workbook = WorkbookFactory.create(new File(excelPath));
+				Sheet sheet = workbook.getSheet(sheetName);
+				workbook.close();
+				return readSheet(sheet);
+			}
+			catch(IOException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}
+
+		private List<Map<String, String>> readSheet(Sheet sheet) {
+			Row row;
+			Cell cell;
+			totalRow = sheet.getLastRowNum();
+			List<Map<String, String>> excelRows = new ArrayList<Map<String, String>>();
+			for (int currentRow = 1; currentRow <= totalRow; currentRow++) {
+				row = sheet.getRow(currentRow);
+				int totalColumn = row.getLastCellNum();
+				LinkedHashMap<String, String> columnMapdata = new LinkedHashMap<String, String>();
+				for (int currentColumn = 0; currentColumn < totalColumn; currentColumn++) {
+					cell = row.getCell(currentColumn);
+					String data = formatter.formatCellValue(cell);
+					String columnHeaderName = sheet.getRow(sheet.getFirstRowNum()).getCell(currentColumn)
+							.getStringCellValue();
+					columnMapdata.put(columnHeaderName, data);
+				}
+				excelRows.add(columnMapdata);
+			}
+			return excelRows;
+		}
+		public int countRow() {
+			return totalRow;
+		}	
+
 }
