@@ -9,7 +9,6 @@ import io.cucumber.junit.CucumberOptions;
 
 @CucumberOptions(features = { "src/test/resources/Features" },
 glue = {"com.dietician.StepDefinition"}, 
-
 		monochrome = true, plugin = { "pretty", "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",
 				"io.qameta.allure.cucumber5jvm.AllureCucumber5Jvm",
 				"html:target/Cucumber.html",
